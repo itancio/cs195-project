@@ -7,6 +7,12 @@ const initializeGame = () => {
       "bool",         // return type
       ["string"],     // argument types
     ),
+    goto: Module.cwrap(
+      "sokoban_goto",
+      "bool",
+      ["unsigned int",
+      "unsigned int"]
+    ),
     boardToStr: Module.cwrap(
       "sokoban_board_to_string",
       "string", // return type
@@ -15,10 +21,15 @@ const initializeGame = () => {
       "sokoban_undo",
       "bool", // return type
     ),
+    redo: Module.cwrap(
+      "sokoban_redo",
+      "bool", // return type
+    ),
   };
 
   const boardEl = document.getElementById("board");
   const undoEl = document.getElementById("undo");
+  const redoEl = document.getElementById("redo");
   const cellToClass = {
     " ": "space",
     "#": "wall",
@@ -62,10 +73,18 @@ const initializeGame = () => {
 
     const row = +cell.getAttribute("data-row");
     const col = +cell.getAttribute("data-col");
-    console.log(row, col);
+
+    if (soko.goto(row, col)) {
+      renderBoard();
+    }
   });
   undoEl.addEventListener("click", event => {
     if (soko.undo()) {
+      renderBoard();
+    }
+  });
+  redoEl.addEventListener("click", event => {
+    if (soko.redo()) {
       renderBoard();
     }
   });

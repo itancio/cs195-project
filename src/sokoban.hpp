@@ -26,7 +26,7 @@ private:
         EMPTY = ' '
     };
 
-    std::unordered_map<Direction, std::pair<int, int>> dir_offset {
+    std::unordered_map<Direction, std::pair<int, int>> dir_offsets {
         {U, std::make_pair(-1, 0)},
         {D, std::make_pair(1, 0)},
         {L, std::make_pair(0, -1)},
@@ -54,10 +54,26 @@ public:
     bool solved();
     std::vector<std::string> board();
     bool move(Direction direction);
+    bool move(unsigned int y, unsigned int x);
     bool undo();  
     bool redo();
     
     void print_board();  
+};
+
+struct PairHash {
+    template <class T1, class T2>
+    size_t operator() (const std::pair<T1, T2> &p) const {
+        return (std::hash<long long>()(p.first) << 16) |
+            std::hash<long long>()(p.second);
+    }
+};
+
+struct PairEqual {
+    template <class T1, class T2>
+    bool operator() (const std::pair<T1, T2> &left, const std::pair<T1, T2> &right) const {
+        return left.first == right.first && left.second == right.second;
+    }
 };
 
 #endif

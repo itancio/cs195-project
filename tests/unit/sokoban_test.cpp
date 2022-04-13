@@ -1,4 +1,5 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+
 #include "doctest.h"
 #include "../../src/sokoban.hpp"
 using Direction = Sokoban::Direction;
@@ -620,4 +621,215 @@ TEST_SUITE("Test cases for redo()") {
         CHECK(soko.move(Direction::R));
         CHECK(soko.board() == expected);
     }
+}
+
+TEST_SUITE("Test cases for the bfs version of move(y, x)") {
+
+    TEST_CASE("should move player to bottom right corder of board") {
+        Sokoban soko({{
+            "######",
+            "#+*. #",
+            "#    #",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#.*. #",
+            "#   @#",
+            "######",
+        };
+        CHECK(soko.move(2, 4));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should move player to top right corner of board") {
+        Sokoban soko({{
+            "######",
+            "#    #",
+            "#+*. #",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#   @#",
+            "#.*. #",
+            "######",
+        };
+        CHECK(soko.move(1, 4));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should move player to bottom left corner of board") {
+        Sokoban soko({{
+            "######",
+            "#   @#",
+            "#.*. #",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#    #",
+            "#+*. #",
+            "######",
+        };
+        CHECK(soko.move(2, 1));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should move player to top left corder of board") {
+        Sokoban soko({{
+            "######",
+            "#.*. #",
+            "#   @#",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#+*. #",
+            "#    #",
+            "######",
+        };
+        CHECK(soko.move(1, 1));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("player should move around the obstacle") {
+        Sokoban soko({{
+            "######",
+            "#    #",
+            "#.*. #",
+            "# $ @#",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#    #",
+            "#+*. #",
+            "# $  #",
+            "######",
+        };
+        CHECK(soko.move(2, 1));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("player should move to the valid adjacent cell") {
+        Sokoban soko({{
+            "######",
+            "#    #",
+            "#.*. #",
+            "# $@ #",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#    #",
+            "#.*. #",
+            "#$@  #",
+            "######",
+        };
+        CHECK(soko.move(3, 2));
+        soko.print_board();
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should not move player when the destination is the current position") {
+        Sokoban soko({{
+            "######",
+            "#@#*.#",
+            "#    #",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#@#*.#",
+            "#    #",
+            "######",
+        };
+        CHECK_FALSE(soko.move(1, 1));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should not mutate board when the specified destination is out-of-bounds") {
+        Sokoban soko({{
+            "#####",
+            "#+*.#",
+            "#####",
+        }});
+        std::vector<std::string> expected = {
+            "#####",
+            "#+*.#",
+            "#####",
+        };
+        CHECK_FALSE(soko.move(5, 6));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should not move player to a destination with a box") {
+        Sokoban soko({{
+            "######",
+            "#.*. #",
+            "#   @#",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#.*. #",
+            "#   @#",
+            "######",
+        };
+        CHECK_FALSE(soko.move(1, 2));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should not move player to a destination with a wall") {
+        Sokoban soko({{
+            "######",
+            "#.*. #",
+            "#   @#",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#.*. #",
+            "#   @#",
+            "######",
+        };
+        CHECK_FALSE(soko.move(0, 0));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should not move player beyond the barricaded boxes") {
+        Sokoban soko({{
+            "######",
+            "#@*. #",
+            "# $  #",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#@*. #",
+            "# $  #",
+            "######",
+        };
+        CHECK_FALSE(soko.move(2, 3));
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should not move player beyond the barricaded wall and box") {
+        Sokoban soko({{
+            "######",
+            "#@#*.#",
+            "# $  #",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#@#*.#",
+            "# $  #",
+            "######",
+        };
+        CHECK_FALSE(soko.move(2, 3));
+        CHECK(soko.board() == expected);
+    }
+
 }

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include <dirent.h>
+#include "loader.cpp"
 #include "sokoban.hpp"
 
 //#include <emscripten/emscripten.h>
@@ -20,18 +20,19 @@ static std::string joined_board;
 
 extern "C" {
 void sokoban_initialize() {
-    std::vector<std::vector<std::string>> levels{{
-        // GRIGoRusha: Shito-Krito #86
-        "  #########",
-        "  #   #  @#",
-        " ##  .$.# #",
-        " #  ##  $ #",
-        "##  .$*#$##",
-        "#  #$#   # ",
-        "#  . .# ## ",
-        "####    #  ",
-        "   ######  ",
-    }};
+    // std::vector<std::vector<std::string>> levels{{
+    //     // GRIGoRusha: Shito-Krito #86
+    //     "  #########",
+    //     "  #   #  @#",
+    //     " ##  .$.# #",
+    //     " #  ##  $ #",
+    //     "##  .$*#$##",
+    //     "#  #$#   # ",
+    //     "#  . .# ## ",
+    //     "####    #  ",
+    //     "   ######  ",
+    // }};
+    std::vector<std::vector<std::string>> levels = load_levels();
     soko = {levels};
 }
 
@@ -46,11 +47,19 @@ const char *sokoban_board_to_string() {
 }
 
 bool sokoban_move(char *s) {
-    return soko.move((Sokoban::Direction)*s);
+    return soko.move((Sokoban::Direction) *s);
+}
+
+bool sokoban_goto(int row, int col) {
+    return soko.move(row, col);
 }
 
 bool sokoban_undo() {
     return soko.undo();
+}
+
+bool sokoban_redo() {
+    return soko.redo();
 }
 
 int sokoban_level() {
@@ -61,47 +70,5 @@ int sokoban_level() {
 int main() {
     std::cout << "Hello Emscripten!\n";
 
-    // Open directory
-    // https://www.quora.com/How-do-I-read-all-files-in-a-folder-in-C
-    // https://www.tutorialspoint.com/How-can-I-get-the-list-of-files-in-a-directory-using-C-Cplusplus
-    struct dirent *entry;
-    DIR *dir = opendir("src/levels/");
-   
-    if (dir == NULL) {
-      return;
-    }
-    while ((entry = readdir(dir)) != NULL) {
-        std::cout << entry->d_name << std::endl;
-    }
-    closedir(dir);
-
-
-
-
-    // Read from the text file
-    std::ifstream file("src/hello.txt");
-
-    if (!file.is_open()) {
-        std::cout << "File cannot be open.\n";
-        return 1;
-    }
-    std::string line;
-
-    std::vector<std::string> level;
-    // Read file line by line
-    while (std::getline(file, line)) {
-        if (isalpha(line.at(0))) {
-            break;
-        }
-        level.push_back(line);
-    }
-
-    for (auto &str : level) {
-        std::cout << str << "\n";
-    }
-
-    // Close the file
-    file.close();
-
-    return;
+    return 0;
 }
