@@ -46,26 +46,9 @@ const onLoaded = () => {
   handleRouting();
 };
 
-const renderLevelComplete = root => {
-  const completeHTML = `
-  <div id="complete">
-    <h1>Level Complete!</h1>
-      <div id="controls">
-        <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
-    </div>
-  `;
-  root.innerHTML = completeHTML;
-  document
-    .querySelector("#change-level")
-    .addEventListener("click", () => {
-      location.hash = "";
-     renderMenu(root);
-    })
-  ;
-};
-
 const renderLevel = (root, levelNumber) => {
   const gameHTML = `
+  <div id="status"></div>
   <div id="game" class="hide">
     <div id="controls">
       <button title="Undo (z key)" id="undo"><span class="material-symbols-outlined">undo</span></button>
@@ -89,6 +72,7 @@ const renderLevel = (root, levelNumber) => {
   const soko = {
     levelNumber: Module.cwrap("sokoban_level"),
     levelsSize: Module.cwrap("sokoban_levels_size"),
+    movesSize: Module.cwrap("sokoban_moves_size"),
     move: Module.cwrap(
       "sokoban_move", // name of C function
       "bool",         // return type
@@ -109,6 +93,7 @@ const renderLevel = (root, levelNumber) => {
       "string", // return type
     ),
     undo: Module.cwrap("sokoban_undo", "bool"),
+    redo: Module.cwrap("sokoban_redo", "bool"),
     solved: Module.cwrap("sokoban_solved", "bool"),
     changeLevel: Module.cwrap(
       "sokoban_change_level",
@@ -150,6 +135,45 @@ const renderLevel = (root, levelNumber) => {
         .join("")}
     </tr>
   `;
+
+  const renderLevelComplete = () => {
+    const completeHTML = `
+    <div id="modal">
+      <div class="modal-content"> 
+        <h1>Level ${soko.levelNumber()+1}</h>
+        <h1>Complete!</h1>
+        <table>
+          <tr>
+            <td>current move:</td>
+            <td id="current-move" class="glow">${soko.movesSize()}</td>
+          </tr>
+          <tr>
+            <td>best move:</td>
+            <td id="best-move" class="glow"></td>
+          </tr>
+        </table>
+        <div id="controls">
+          <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
+        </div>
+    </div>
+    `;
+    document.querySelector("#status").innerHTML = completeHTML;
+    document
+      .querySelector("#change-level")
+      .addEventListener("click", () => {
+        location.hash = "";
+       renderMenu(root);
+      })
+    ;
+    document
+    .querySelector("#next-level")
+    .addEventListener("click", () => {
+      location.hash = "";
+      renderLevel(root, levelNumber);
+    })
+  ;
+  };
+
   const renderBoard = () => {
     console.log(soko.sequence());
     boardEl.innerHTML =
@@ -173,6 +197,10 @@ const renderLevel = (root, levelNumber) => {
 
     if (soko.goto(row, col)) {
       renderBoard();
+
+      if (soko.solved()) {
+        renderLevelComplete()
+      }
     }
   });
   undoEl.addEventListener("click", event => {
@@ -200,8 +228,7 @@ const renderLevel = (root, levelNumber) => {
         renderBoard();
 
         if (soko.solved()) {
-          setTimeout(() => { renderLevelComplete(root); }, 100);
-          console.log("solved!");
+          renderLevelComplete(root);
         }
       }
     }

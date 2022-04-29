@@ -75,6 +75,7 @@ public:
     void reset();
     bool rewind();
     std::string sequence();
+    unsigned int moves_size();
 
     void print_board();  
 };

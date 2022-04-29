@@ -98,6 +98,10 @@ const char *sokoban_sequence() {
     return sequence_str.c_str();
 }
 
+int sokoban_moves_size() {
+    return soko.moves_size();
+}
+
 int sokoban_level() {
     return soko.level();
 }

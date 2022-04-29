@@ -128,24 +128,6 @@ button[disabled] {
   padding: 0.3em;
 }
 
-#complete h1 {
-  cursor: default;
-  margin-bottom: 0.1em;
-  font-size: 82pt;
-  font-weight: 400;
-  text-align: center;
-  font-family: "Neonderthaw", cursive;
-  text-shadow:
-    /* inner glow */
-    0 0 7px #fff,
-    0 0 17px #fff,
-    /* outer glow */
-    0 0 32px #f0f,
-    0 0 42px #f0f,
-    0 0 82px #f0f,
-    0 0 182px #f0f;
-}
-
 #game {
   flex-direction: column;
   align-items: center;
@@ -216,4 +198,89 @@ button[disabled] {
 }
 #board .player-on-goal {
   background: url("assets/player_on_goal.png");
+}
+
+/* The Modal (background) */
+#modal {
+  /*display: none; /* Hidden by default */ 
+  display: inline-block;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%;
+  overflow:disabled; /* Disable scroll */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.65); /* Black w/ opacity */
+}
+
+.glow {
+  font-size: 20px;
+  padding-left:30px;
+  text-shadow:
+    /* inner glow */
+    0 0 1px #fff,
+    0 0 10px #fff,
+    /* outer glow */
+    0 0 30px #f0f,
+    0 0 30px #f0f,
+    0 0 70px #f0f,
+    0 0 120px #f0f;
+}
+
+/* Modal Content Box */
+.modal-content {
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+  margin: 50px auto; 
+  padding: 24px 12px;
+  border: 1px solid #f0f;
+  border-radius:10px 50px;
+  width: 320px;
+  height: 260px;
+  text-align: center;
+
+  opacity: 0;
+  animation: fade-in ease 0.4s both;
+}
+
+.modal-content h1 {
+  cursor: default;
+  border-radius: 1vw 5vw;
+  background-color:#000;
+  font-size: 32px;
+  font-weight: 100;
+  letter-spacing: .03em;
+  text-shadow:
+    /* inner glow */
+    0 0 1px #fff,
+    0 0 10px #fff,
+    /* outer glow */
+    0 0 30px #f0f,
+    0 0 30px #f0f,
+    0 0 70px #f0f,
+    0 0 120px #f0f;
+
+    opacity: 0;
+    animation: fade-in ease 0.5s both;
+}
+
+.modal-content table {
+  margin: 2% auto;
+  padding: 10px 10px 0px 10px;;
+}
+
+.modal-content td {
+  text-align:right;
+}
+
+/* Modal Animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

@@ -284,3 +284,7 @@ std::string Sokoban::sequence() {
     }
     return sequence;
 }
+
+unsigned int Sokoban::moves_size() {
+    return moves.size();
+}

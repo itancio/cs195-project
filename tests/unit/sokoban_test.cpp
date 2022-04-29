@@ -1261,3 +1261,45 @@ TEST_SUITE("Test cases for sequence()") {
         CHECK(soko.board() == expected);
     }
 }
+
+TEST_SUITE("Test cases for count_moves()") {
+
+    TEST_CASE("should return 0 moves") {
+        Sokoban soko({{
+            "######",
+            "#+*. #",
+            "#    #",
+            "######",
+        }});
+        std::vector<std::string> expected = {
+            "######",
+            "#+*. #",
+            "#    #",
+            "######",
+        };
+        CHECK(soko.count_moves() == 0);
+        CHECK(soko.board() == expected);
+    }
+
+    TEST_CASE("should return 0 moves") {
+        Sokoban soko({{
+            "#####",
+            "# @ #",
+            "#   #",
+            "#   #",
+            "#   #",
+            "#####",
+        }});
+        std::vector<std::string> expected = {
+            "#####",
+            "#   #",
+            "#   #",
+            "#   #",
+            "# @ #",
+            "#####",
+        };
+        CHECK(soko.move(4, 2));
+        CHECK(soko.moves_size() == 3);
+        CHECK(soko.board() == expected);
+    }
+}
