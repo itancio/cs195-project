@@ -57,7 +57,7 @@ const renderLevel = (root, levelNumber) => {
   <div id="game" class="hide">
     <div id="controls">
       <button title="Undo (z key)" id="undo"><span class="material-symbols-outlined">undo</span></button>
-      <button title="Redo (r key)" id="redo" disabled><span class="material-symbols-outlined">redo</span></button>
+      <button title="Reset (r key)" id="reset"><span class="material-symbols-outlined">refresh</span></button>
       <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
       <button title="Settings" disabled><span class="material-symbols-outlined">settings</span></button>
       <button title="Help" disabled><span class="material-symbols-outlined">help</span></button>
@@ -97,8 +97,8 @@ const renderLevel = (root, levelNumber) => {
       "sokoban_sequence",
       "string", // return type
     ),
+    reset: Module.cwrap("sokoban_reset"),
     undo: Module.cwrap("sokoban_undo", "bool"),
-    redo: Module.cwrap("sokoban_redo", "bool"),
     solved: Module.cwrap("sokoban_solved", "bool"),
     changeLevel: Module.cwrap(
       "sokoban_change_level",
@@ -116,7 +116,7 @@ const renderLevel = (root, levelNumber) => {
 
   const boardEl = document.getElementById("board");
   const undoEl = document.getElementById("undo");
-  const redoEl = document.getElementById("redo");
+  const resetEl = document.getElementById("reset");
   const cellToClass = {
     "_": "floor-outside",
     " ": "floor",
@@ -215,10 +215,9 @@ const renderLevel = (root, levelNumber) => {
       renderBoard();
     }
   });
-  redoEl.addEventListener("click", event => {
-    if (soko.redo()) {
-      renderBoard();
-    }
+  resetEl.addEventListener("click", event => {
+    soko.reset();
+    renderBoard();
   });
  
   const moves = {

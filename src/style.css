@@ -174,7 +174,7 @@ button[disabled] {
 #board {
   margin: 0 auto;
 
-  animation: bounceIn ease-out 300ms both;
+  animation: jackInTheBox ease-out 300ms both;
 }
 #board table {
   border-collapse: collapse;
@@ -257,10 +257,9 @@ button[disabled] {
   text-align: center;
 
   /* Border Glow */
-  border-color: #f0f;
   box-shadow: 
       /* inner glow */
-      0 0 1px #fff,
+      0 0 2px #fff,
       /* outer glow */
       0 0 1px #f0f,
       0 0 3px #f0f;
@@ -274,7 +273,14 @@ button[disabled] {
   font-size: 32px;
   font-weight: 100;
   letter-spacing: .03em;
-
+  text-shadow:
+    0 0 7px #fff,
+    0 0 17px #fff,
+    /* outer glow */
+    0 0 32px #f0f,
+    0 0 42px #f0f,
+    0 0 82px #f0f,
+    0 0 182px #f0f;
 }
 
 .modal-content table {

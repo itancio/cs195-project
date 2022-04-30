@@ -89,8 +89,8 @@ bool sokoban_undo() {
     return soko.rewind();
 }
 
-bool sokoban_redo() {
-    return soko.redo();
+void sokoban_reset() {
+    return soko.reset();
 }
 
 const char *sokoban_sequence() {
