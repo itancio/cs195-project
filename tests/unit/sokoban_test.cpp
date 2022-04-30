@@ -1277,7 +1277,7 @@ TEST_SUITE("Test cases for count_moves()") {
             "#    #",
             "######",
         };
-        CHECK(soko.count_moves() == 0);
+        CHECK(soko.moves() == 0);
         CHECK(soko.board() == expected);
     }
 
@@ -1299,7 +1299,7 @@ TEST_SUITE("Test cases for count_moves()") {
             "#####",
         };
         CHECK(soko.move(4, 2));
-        CHECK(soko.moves_size() == 3);
+        CHECK(soko.moves() == 3);
         CHECK(soko.board() == expected);
     }
 }

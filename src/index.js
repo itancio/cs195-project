@@ -2,6 +2,11 @@ const renderLoading = root => {
   root.innerHTML = `<div id="loading">loading...</div>`;
 };
 
+/* Store best score to localStorage and map */
+const updateBestScore = (levelNumber, score) => {
+  localStorage.setItem(levelNumber, score);
+};
+
 const renderMenu = root => {
   const menuHTML = `
   <div id="menu">
@@ -14,10 +19,10 @@ const renderMenu = root => {
         <li>
           <a href="#${i + 1}">
             <span class="material-symbols-outlined">
-              ${Math.random() > 0.5 ? "check_box_outline_blank" : "check_box"}
+              ${(localStorage.getItem(i + 1) == null) ? "check_box_outline_blank" : "check_box"}
             </span>
             <span>level ${i + 1}</span>
-            <span>best: ${~~(Math.random() * 2050)}</span>
+            <span>best: ${(localStorage.getItem(i + 1) == null)  ? "&infin;" : localStorage.getItem(i + 1)}</span>
           </a>
         </li>
       `).join("")}
@@ -140,16 +145,16 @@ const renderLevel = (root, levelNumber) => {
     const completeHTML = `
     <div id="modal">
       <div class="modal-content"> 
-        <h1>Level ${soko.levelNumber()+1}</h>
-        <h1>Complete!</h1>
+        <h1 class="text-glow">Level ${soko.levelNumber()+1}</h>
+        <h1 class="text-glow">Complete!</h1>
         <table>
           <tr>
-            <td>current move:</td>
-            <td id="current-move" class="glow">${soko.movesSize()}</td>
+            <td>Current moves:</td>
+            <td id="current-move" class="score">${soko.movesSize()}</td>
           </tr>
           <tr>
-            <td>best move:</td>
-            <td id="best-move" class="glow"></td>
+            <td>Best moves:</td>
+            <td id="best-move" class="score">${localStorage.getItem(soko.levelNumber()+1)}</td>
           </tr>
         </table>
         <div id="controls">
@@ -165,13 +170,6 @@ const renderLevel = (root, levelNumber) => {
        renderMenu(root);
       })
     ;
-    document
-    .querySelector("#next-level")
-    .addEventListener("click", () => {
-      location.hash = "";
-      renderLevel(root, levelNumber);
-    })
-  ;
   };
 
   const renderBoard = () => {
@@ -199,7 +197,16 @@ const renderLevel = (root, levelNumber) => {
       renderBoard();
 
       if (soko.solved()) {
-        renderLevelComplete()
+        const score = localStorage.getItem(levelNumber+1);
+        if (score) {
+          if (score > soko.movesSize()){
+            updateBestScore(levelNumber+1, soko.movesSize());
+          }
+        } 
+        else if (!score) {
+          updateBestScore(levelNumber+1, soko.movesSize());
+        }
+        renderLevelComplete();
       }
     }
   });

@@ -33,14 +33,14 @@ void sokoban_initialize() {
             "    ####",
         },
         {
-            // GRIGoRusha: Shito-Krito #86
+            // Modified GRIGoRusha: Shito-Krito #86
             "  #########",
             "  #   #  @#",
-            " ##  .$.# #",
+            " ##    .# #",
             " #  ##  $ #",
-            "##  .$*#$##",
+            "##  .$ # ##",
             "#  #$#   # ",
-            "#  . .# ## ",
+            "#   .# ## ",
             "####    #  ",
             "   ######  ",
         },
@@ -99,7 +99,7 @@ const char *sokoban_sequence() {
 }
 
 int sokoban_moves_size() {
-    return soko.moves_size();
+    return soko.moves();
 }
 
 int sokoban_level() {
@@ -118,4 +118,3 @@ int sokoban_levels_size() {
 int main() {
     std::cout << "Hello Emscripten!\n";
 }
-

@@ -52,7 +52,7 @@ private:
     unsigned int current_level;
     unsigned int py;
     unsigned int px;
-    std::vector<Direction> moves;
+    std::vector<Direction> _moves;
     std::vector<std::pair<std::vector<std::string>, bool>> history;
     std::vector<std::pair<Direction, std::vector<std::string>>> undone;
 
@@ -75,7 +75,7 @@ public:
     void reset();
     bool rewind();
     std::string sequence();
-    unsigned int moves_size();
+    unsigned int moves();
 
     void print_board();  
 };

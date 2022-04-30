@@ -215,18 +215,17 @@ button[disabled] {
   background-color: rgba(0,0,0,0.65); /* Black w/ opacity */
 }
 
-.glow {
+.text-glow {
   font-size: 20px;
-  padding-left:30px;
   text-shadow:
-    /* inner glow */
-    0 0 1px #fff,
-    0 0 10px #fff,
     /* outer glow */
-    0 0 30px #f0f,
-    0 0 30px #f0f,
-    0 0 70px #f0f,
-    0 0 120px #f0f;
+    0 0 10px #f0f,
+    0 0 20px #f0f,
+    0 0 20px #f0f;
+}
+
+.score {
+  padding-left:30px;
 }
 
 /* Modal Content Box */
@@ -238,36 +237,35 @@ button[disabled] {
   border: 1px solid #f0f;
   border-radius:10px 50px;
   width: 320px;
-  height: 260px;
+  height: 285px;
   text-align: center;
 
+  /* Border Glow */
+  border-color: #f0f;
+  box-shadow: 
+      /* inner glow */
+      0 0 1px #fff,
+      /* outer glow */
+      0 0 1px #f0f,
+      0 0 3px #f0f;
+
   opacity: 0;
-  animation: fade-in ease 0.4s both;
+  animation: fade-in ease 0.2s both;
 }
 
 .modal-content h1 {
   cursor: default;
-  border-radius: 1vw 5vw;
-  background-color:#000;
+  border-radius:10px 50px;
   font-size: 32px;
   font-weight: 100;
   letter-spacing: .03em;
-  text-shadow:
-    /* inner glow */
-    0 0 1px #fff,
-    0 0 10px #fff,
-    /* outer glow */
-    0 0 30px #f0f,
-    0 0 30px #f0f,
-    0 0 70px #f0f,
-    0 0 120px #f0f;
 
-    opacity: 0;
-    animation: fade-in ease 0.5s both;
+  opacity: 0;
+  animation: fade-in ease 0.5s both;
 }
 
 .modal-content table {
-  margin: 2% auto;
+  margin: 20px auto;
   padding: 10px 10px 0px 10px;;
 }
 

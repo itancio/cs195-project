@@ -75,7 +75,7 @@ void Sokoban::push_box(int dy, int dx) {
 
 /* Update move with associated board state */
 void Sokoban::update(Direction direction) {
-    moves.push_back(direction);
+    _moves.push_back(direction);
     history.push_back(std::make_pair(_board, true));
 }
 
@@ -210,13 +210,13 @@ bool Sokoban::move(unsigned int y, unsigned int x) {
 }
 
 bool Sokoban::undo() {
-    if (moves.empty()) {
+    if (_moves.empty()) {
         return false;
     }
 
-    undone.push_back(std::make_pair(moves.back(), _board));
+    undone.push_back(std::make_pair(_moves.back(), _board));
 
-    moves.pop_back();
+    _moves.pop_back();
     history.pop_back();
 
     _board = history.back().first;
@@ -248,20 +248,20 @@ void Sokoban::reset() {
 void Sokoban::change_level(unsigned int level_number) {
     current_level = level_number;
     _board = levels.at(current_level);
-    moves.clear();
+    _moves.clear();
     undone.clear();
     history.push_back(std::make_pair(_board, false));
     locate_player();
 }
 
 bool Sokoban::rewind() {
-    if (moves.empty()) {
+    if (_moves.empty()) {
         return false;
     }
 
     undo();
 
-    while (!moves.empty()) {
+    while (!_moves.empty()) {
         bool fast_forward = history.back().second;
 
         if (!fast_forward) {
@@ -279,12 +279,12 @@ bool Sokoban::rewind() {
 
 std::string Sokoban::sequence() {
     std::string sequence = "";
-    for (const auto& direction : moves) {
+    for (const auto& direction : _moves) {
         sequence.push_back((char) direction);
     }
     return sequence;
 }
 
-unsigned int Sokoban::moves_size() {
-    return moves.size();
+unsigned int Sokoban::moves() {
+    return _moves.size();
 }
