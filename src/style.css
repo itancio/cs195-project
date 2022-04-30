@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Neonderthaw&family=Open+Sans:wght@300&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
 
 
 * {
@@ -83,6 +84,7 @@ button[disabled] {
 
 #menu {
 }
+
 #menu h1 {
   cursor: default;
   margin-bottom: 0.1em;
@@ -91,14 +93,16 @@ button[disabled] {
   text-align: center;
   font-family: "Neonderthaw", cursive;
   text-shadow:
-    /* inner glow */
-    0 0 7px #fff,
-    0 0 17px #fff,
-    /* outer glow */
-    0 0 32px #f0f,
-    0 0 42px #f0f,
-    0 0 82px #f0f,
-    0 0 182px #f0f;
+  /* inner glow */
+  0 0 7px #fff,
+  0 0 17px #fff,
+  /* outer glow */
+  0 0 32px #f0f,
+  0 0 42px #f0f,
+  0 0 82px #f0f,
+  0 0 182px #f0f;
+
+  animation: flicker ease 1s both;
 }
 #menu .attribution {
   text-align: right;
@@ -106,6 +110,12 @@ button[disabled] {
   color: #bbb;
   font-size: 12pt;
 }
+#menu li {
+  opacity: 0;
+
+  animation: fadeInDown ease 1s both;
+}
+
 #menu ul {
   font-size: 15pt;
   max-width: 600px;
@@ -138,11 +148,14 @@ button[disabled] {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
+
+  
 }
 #controls button {
   margin: 0.3em;
   padding: 0.6em;
 }
+
 #controls button:hover {
   text-shadow:
     /* inner glow */
@@ -160,6 +173,8 @@ button[disabled] {
 
 #board {
   margin: 0 auto;
+
+  animation: bounceIn ease-out 300ms both;
 }
 #board table {
   border-collapse: collapse;
@@ -172,6 +187,7 @@ button[disabled] {
   min-width: 30px;
   min-height: 30px;
   image-rendering: pixelated;
+  
 }
 #board .floor {
   background: url("assets/floor.png") ;
@@ -249,8 +265,7 @@ button[disabled] {
       0 0 1px #f0f,
       0 0 3px #f0f;
 
-  opacity: 0;
-  animation: fade-in ease 0.2s both;
+  animation: fadeIn ease 350ms both;
 }
 
 .modal-content h1 {
@@ -260,8 +275,6 @@ button[disabled] {
   font-weight: 100;
   letter-spacing: .03em;
 
-  opacity: 0;
-  animation: fade-in ease 0.5s both;
 }
 
 .modal-content table {
@@ -273,12 +286,20 @@ button[disabled] {
   text-align:right;
 }
 
-/* Modal Animation */
-@keyframes fade-in {
-  from {
-    opacity: 0;
+/* Animation Effects */
+@keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow:
+    /* inner glow */
+    0 0 7px #fff,
+    0 0 17px #fff,
+    /* outer glow */
+    0 0 32px #f0f,
+    0 0 42px #f0f,
+    0 0 82px #f0f,
+    0 0 182px #f0f;
   }
-  to {
-    opacity: 1;
+  20%, 24%, 55% {       
+    text-shadow: none;
   }
 }
