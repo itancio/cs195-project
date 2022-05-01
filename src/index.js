@@ -159,6 +159,7 @@ const renderLevel = (root, levelNumber) => {
         </table>
         <div id="controls">
           <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
+          <button title="Next" id="next"><span class="material-symbols-outlined">arrow_forward</span></button>
         </div>
     </div>
     `;
@@ -167,9 +168,15 @@ const renderLevel = (root, levelNumber) => {
       .querySelector("#change-level")
       .addEventListener("click", () => {
         location.hash = "";
-       renderMenu(root);
+        renderMenu(root);
       })
     ;
+    document.querySelector("#next").addEventListener("click", () => {
+      if (levelNumber < (soko.levelsSize() - 1)) {
+        location.hash = (levelNumber + 2).toString();
+        renderLevel(root, levelNumber + 1);
+      }
+    });
   };
 
   const renderBoard = () => {
