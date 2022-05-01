@@ -53,7 +53,7 @@ const onLoaded = () => {
 
 const renderLevel = (root, levelNumber) => {
   const gameHTML = `
-  <div id="status"></div>
+  <div id="complete-level-screen"></div>
   <div id="game" class="hide">
     <div id="controls">
       <button title="Undo (z key)" id="undo"><span class="material-symbols-outlined">undo</span></button>
@@ -63,6 +63,7 @@ const renderLevel = (root, levelNumber) => {
       <button title="Help" disabled><span class="material-symbols-outlined">help</span></button>
     </div>
     <div id="board"></div>
+    <div id="status"></div>
   </div>
   `;
   root.innerHTML = gameHTML;
@@ -154,29 +155,42 @@ const renderLevel = (root, levelNumber) => {
           </tr>
           <tr>
             <td>Best moves:</td>
-            <td id="best-move" class="score">${localStorage.getItem(soko.levelNumber()+1)}</td>
+            <td id="best-move" class="score">${localStorage.getItem(soko.levelNumber()+1)}
+            </td>
           </tr>
         </table>
         <div id="controls">
+          <button title="Random" id="random-level"><span class="material-symbols-outlined">shuffle</span></button>
           <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
-          <button title="Next" id="next"><span class="material-symbols-outlined">arrow_forward</span></button>
+          <button title="Next" id="next"><span class="material-symbols-outlined">fast_forward</span></button>
         </div>
     </div>
     `;
-    document.querySelector("#status").innerHTML = completeHTML;
-    document
-      .querySelector("#change-level")
-      .addEventListener("click", () => {
-        location.hash = "";
-        renderMenu(root);
-      })
+    document.querySelector("#complete-level-screen").innerHTML = completeHTML;
+
+    document.querySelector("#change-level").addEventListener("click", () => {
+      location.hash = "";
+      renderMenu(root);
+    })
     ;
     document.querySelector("#next").addEventListener("click", () => {
       if (levelNumber < (soko.levelsSize() - 1)) {
         location.hash = (levelNumber + 2).toString();
         renderLevel(root, levelNumber + 1);
       }
-    });
+    })
+    ;
+    document.querySelector("#random-level").addEventListener("click", () => {
+      /* Randomly selects unplayed levels first */
+      const activeLevels = Object.keys(localStorage);
+      const randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
+      while (activeLevels.includes(randomLevelNumber+1)) {
+        randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
+      }
+      location.hash = (randomLevelNumber+1).toString();
+      renderLevel(root, randomLevelNumber);
+    })
+    ;
   };
 
   const renderBoard = () => {
@@ -189,6 +203,7 @@ const renderLevel = (root, levelNumber) => {
           .join("") +
       "</tbody></table>"
     ;
+    renderStatus();
   };
   boardEl.addEventListener("click", event => {
     const cell = event.target.closest("td");
@@ -217,6 +232,22 @@ const renderLevel = (root, levelNumber) => {
       }
     }
   });
+
+  renderStatus = () => {
+    const statusHTML = `
+    <div>Level ${soko.levelNumber()+1}</div>
+    <div> STATS
+      <button title="status"><span class="material-symbols-outlined">expand_circle_down</span></button>
+    </div>
+    <div id="status-collapse">
+      <div>current: ${soko.movesSize()}</div>
+      <div>best: ${localStorage.getItem(soko.levelNumber()+1)} </div>
+      <div id="status-box">${soko.sequence()} </div>
+    </div
+    `;
+    document.querySelector("#status").innerHTML = statusHTML;
+  };
+
   undoEl.addEventListener("click", event => {
     if (soko.undo()) {
       renderBoard();
@@ -241,7 +272,16 @@ const renderLevel = (root, levelNumber) => {
         renderBoard();
 
         if (soko.solved()) {
-          renderLevelComplete(root);
+          const score = localStorage.getItem(levelNumber+1);
+          if (score) {
+            if (score > soko.movesSize()){
+              updateBestScore(levelNumber+1, soko.movesSize());
+            }
+          } 
+          else if (!score) {
+            updateBestScore(levelNumber+1, soko.movesSize());
+          }
+          renderLevelComplete();
         }
       }
     }
@@ -251,6 +291,7 @@ const renderLevel = (root, levelNumber) => {
   };
 
   renderBoard();
+  renderStatus();
 };
 
 var Module = {
