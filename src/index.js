@@ -168,11 +168,14 @@ const renderLevel = (root, levelNumber) => {
     `;
     document.querySelector("#complete-level-screen").innerHTML = completeHTML;
 
+    /* Listens to home selector */
     document.querySelector("#change-level").addEventListener("click", () => {
       location.hash = "";
       renderMenu(root);
     })
     ;
+
+    /* Listens to next level selector */
     document.querySelector("#next").addEventListener("click", () => {
       if (levelNumber < (soko.levelsSize() - 1)) {
         location.hash = (levelNumber + 2).toString();
@@ -180,13 +183,15 @@ const renderLevel = (root, levelNumber) => {
       }
     })
     ;
+
+    /* Listens to random level selector */
     document.querySelector("#random-level").addEventListener("click", () => {
-      /* Randomly selects unplayed levels first */
       const activeLevels = Object.keys(localStorage);
       const randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
-      while (activeLevels.includes(randomLevelNumber+1)) {
-        randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
-      }
+      // TODO: Needs work
+      // while (activeLevels.includes(randomLevelNumber+1)) {
+      //   randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
+      // }
       location.hash = (randomLevelNumber+1).toString();
       renderLevel(root, randomLevelNumber);
     })
@@ -194,7 +199,6 @@ const renderLevel = (root, levelNumber) => {
   };
 
   const renderBoard = () => {
-    console.log(soko.sequence());
     boardEl.innerHTML =
       "<table><tbody>" +
         soko.boardToStr()
@@ -236,16 +240,27 @@ const renderLevel = (root, levelNumber) => {
   renderStatus = () => {
     const statusHTML = `
     <div>Level ${soko.levelNumber()+1}</div>
-    <div> STATS
-      <button title="status"><span class="material-symbols-outlined">expand_circle_down</span></button>
-    </div>
-    <div id="status-collapse">
-      <div>current: ${soko.movesSize()}</div>
-      <div>best: ${localStorage.getItem(soko.levelNumber()+1)} </div>
+    <button title="Stats" class="collapse"><span class="material-symbols-outlined">expand_circle_down</span></button>
+    <div class="stats">
+      <div>current:  ${soko.movesSize()}</div>
+      <div>best:  ${(localStorage.getItem(soko.levelNumber()+1) == null)  ? 
+        "&infin;" : (localStorage.getItem(soko.levelNumber()+1))} </div>
       <div id="status-box">${soko.sequence()} </div>
     </div
     `;
     document.querySelector("#status").innerHTML = statusHTML;
+
+    const collapseEl = document.querySelector(".collapse");
+    const statsEl = document.querySelector(".stats");
+    collapseEl.addEventListener("click", event => {
+      statsEl.classList.toggle("active");
+      if (statsEl.style.maxHeight) {
+        statsEl.style.maxHeight = null;
+      } 
+      else {
+        statsEl.style.maxHeight = statsEl.scrollHeight + "px";
+      } 
+    });
   };
 
   undoEl.addEventListener("click", event => {
@@ -291,7 +306,6 @@ const renderLevel = (root, levelNumber) => {
   };
 
   renderBoard();
-  renderStatus();
 };
 
 var Module = {
