@@ -69,6 +69,19 @@ button {
   cursor: pointer;
   transition: all 0.2s;
 }
+
+button:hover {
+  text-shadow:
+    /* inner glow */
+    0 0 7px #fff,
+    0 0 17px #fff,
+    /* outer glow */
+    0 0 32px #f0f,
+    0 0 42px #f0f,
+    0 0 82px #f0f,
+    0 0 182px #f0f;
+}
+
 button[disabled] {
   cursor: default;
   color: #999;
@@ -154,17 +167,18 @@ button[disabled] {
   padding: 0.6em;
 }
 
-#controls button:hover {
+/* #controls button:hover {
   text-shadow:
-    /* inner glow */
+    /* inner glow 
     0 0 7px #fff,
     0 0 17px #fff,
-    /* outer glow */
+    /* outer glow 
     0 0 32px #f0f,
     0 0 42px #f0f,
     0 0 82px #f0f,
     0 0 182px #f0f;
-}
+} */
+
 #controls button[disabled]:hover {
   text-shadow: 0 0 0 #000;
 }
@@ -216,7 +230,6 @@ button[disabled] {
 
 #status {
   margin: 20px;
-  font-size: 16px;
   letter-spacing: 2px;
   text-align: center;
   width: 300px;
@@ -229,7 +242,7 @@ button[disabled] {
 }
 
 /* Collapsable Contents */
-.stats {
+#stats {
   font-size: 12px;
   padding: 0 18px;
   max-height: 0;
@@ -237,7 +250,8 @@ button[disabled] {
   transition: max-height 0.2s ease-out;
 }
 
-.collapse {
+#collapse {
+  content: expand_circle_down;
   color: #00dfef;
   cursor: pointer;
   border: none;
@@ -248,12 +262,13 @@ button[disabled] {
   transition: 0.4s;
 }
 
-.collapse:after {
-  color: #00dfef;
+#collapse:after {
   font-weight: bold;
   float: right;
   margin-left: 5px;
 }
+
+
 
 /* The Modal (background) */
 #modal {

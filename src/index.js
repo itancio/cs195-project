@@ -60,10 +60,18 @@ const renderLevel = (root, levelNumber) => {
       <button title="Reset (r key)" id="reset"><span class="material-symbols-outlined">refresh</span></button>
       <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
       <button title="Settings" disabled><span class="material-symbols-outlined">settings</span></button>
-      <button title="Help" disabled><span class="material-symbols-outlined">help</span></button>
+      <button title="Help" id="help" disabled><span class="material-symbols-outlined">help</span></button>
     </div>
     <div id="board"></div>
-    <div id="status"></div>
+    <div id="status">
+      <div>Level <span id="level-label"></span></div>
+      <button title="Stats" id="collapse"><span class="material-symbols-outlined">keyboard_double_arrow_down</span></button>
+      <div id="stats">
+        <div>current:  <span id="current"></span></div>
+        <div>best:  <span id="best"></span></div>
+        <div id="status-box"><span id="sequence"></span></div>
+      </div>
+    </div>
   </div>
   `;
   root.innerHTML = gameHTML;
@@ -118,6 +126,11 @@ const renderLevel = (root, levelNumber) => {
   const boardEl = document.getElementById("board");
   const undoEl = document.getElementById("undo");
   const resetEl = document.getElementById("reset");
+  const helpEl = document.getElementById("help");
+
+  const collapseEl = document.getElementById("collapse");
+  const statsEl = document.getElementById("stats");
+
   const cellToClass = {
     "_": "floor-outside",
     " ": "floor",
@@ -142,7 +155,7 @@ const renderLevel = (root, levelNumber) => {
     </tr>
   `;
 
-  const renderLevelComplete = () => {
+  renderLevelComplete = () => {
     const completeHTML = `
     <div id="modal">
       <div class="modal-content"> 
@@ -207,7 +220,7 @@ const renderLevel = (root, levelNumber) => {
           .join("") +
       "</tbody></table>"
     ;
-    renderStatus();
+    updateStatus();
   };
   boardEl.addEventListener("click", event => {
     const cell = event.target.closest("td");
@@ -237,31 +250,35 @@ const renderLevel = (root, levelNumber) => {
     }
   });
 
-  renderStatus = () => {
-    const statusHTML = `
-    <div>Level ${soko.levelNumber()+1}</div>
-    <button title="Stats" class="collapse"><span class="material-symbols-outlined">expand_circle_down</span></button>
-    <div class="stats">
-      <div>current:  ${soko.movesSize()}</div>
-      <div>best:  ${(localStorage.getItem(soko.levelNumber()+1) == null)  ? 
-        "&infin;" : (localStorage.getItem(soko.levelNumber()+1))} </div>
-      <div id="status-box">${soko.sequence()} </div>
-    </div
-    `;
-    document.querySelector("#status").innerHTML = statusHTML;
 
-    const collapseEl = document.querySelector(".collapse");
-    const statsEl = document.querySelector(".stats");
-    collapseEl.addEventListener("click", event => {
-      statsEl.classList.toggle("active");
-      if (statsEl.style.maxHeight) {
-        statsEl.style.maxHeight = null;
-      } 
-      else {
-        statsEl.style.maxHeight = statsEl.scrollHeight + "px";
-      } 
-    });
+
+ updateStatus = () => {
+    document.getElementById("level-label").innerHTML = `${soko.levelNumber()+1}`;
+    document.getElementById("current").innerHTML = `${soko.movesSize()}`;
+    document.getElementById("best").innerHTML = `${(localStorage.getItem(soko.levelNumber()+1) == null)  ? 
+      "&infin;" : (localStorage.getItem(soko.levelNumber()+1))}`;
+    document.getElementById("sequence").innerHTML = `${soko.sequence()}`;
+    console.log(soko.sequence);
   };
+
+  collapseEl.addEventListener("click", event => {
+ 
+    
+    statsEl.classList.toggle("active");
+    if (statsEl.style.maxHeight) {
+      statsEl.style.maxHeight = null;
+      document.getElementById("collapse").innerHTML = `
+      <span class="material-symbols-outlined">keyboard_double_arrow_down</span>
+      `;
+    } 
+    else {
+      statsEl.style.maxHeight = statsEl.scrollHeight + "px";
+      document.getElementById("collapse").innerHTML = `
+      <span class="material-symbols-outlined">keyboard_double_arrow_up</span>
+      `;
+    } 
+  });
+
 
   undoEl.addEventListener("click", event => {
     if (soko.undo()) {
