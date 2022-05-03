@@ -59,7 +59,7 @@ const renderLevel = (root, levelNumber) => {
       <button title="Undo (z key)" id="undo"><span class="material-symbols-outlined">undo</span></button>
       <button title="Reset (r key)" id="reset"><span class="material-symbols-outlined">refresh</span></button>
       <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
-      <button title="Settings" disabled><span class="material-symbols-outlined">settings</span></button>
+      <button title="Settings" id="settings"><span class="material-symbols-outlined">settings</span></button>
       <button title="Help" id="help"><span class="material-symbols-outlined">help</span></button>
     </div>
     <div id="board"></div>
@@ -127,6 +127,7 @@ const renderLevel = (root, levelNumber) => {
   const undoEl = document.getElementById("undo");
   const resetEl = document.getElementById("reset");
   const helpEl = document.getElementById("help");
+  const settingsEl = document.getElementById("settings");
 
   const collapseEl = document.getElementById("collapse");
   const statsEl = document.getElementById("stats");
@@ -154,6 +155,22 @@ const renderLevel = (root, levelNumber) => {
         .join("")}
     </tr>
   `;
+
+  renderSettings = () => {  
+    const settingsHTML = `
+    <div id="modal">
+      <div class="modal-content">
+        <span class="close material-symbols-outlined">cancel</span>
+        <h1>Setting</h1>
+      </div>
+    </div>
+    `;
+    document.querySelector("#overlay-screen").innerHTML = settingsHTML;
+
+    document.querySelector(".close").addEventListener("click", () => {
+      document.querySelector("#modal").style.display = "none";
+    });
+  };
 
   renderHelp = () => {  
     const helpHTML = `
@@ -298,6 +315,10 @@ const renderLevel = (root, levelNumber) => {
       <span class="material-symbols-outlined">keyboard_double_arrow_up</span>
       `;
     } 
+  });
+
+  settingsEl.addEventListener("click", event => {
+    renderSettings();
   });
 
   helpEl.addEventListener("click", event => {
