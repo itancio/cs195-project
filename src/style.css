@@ -344,6 +344,34 @@ button[disabled] {
   text-align:right;
 }
 
+.modal-content p {
+  margin: 20px 10px;
+  font-size:13px;
+}
+
+/* The Close Button */
+.close {
+  color: #f0f;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius:10px;
+}
+
+.close:hover,
+.close:focus {
+  color: #f0f;
+  cursor: pointer;
+  text-shadow:
+  0 0 7px #fff,
+  0 0 17px #fff,
+  /* outer glow */
+  0 0 32px #f0f,
+  0 0 42px #f0f,
+  0 0 82px #f0f,
+  0 0 182px #f0f;
+}
+
 /* Animation Effects */
 @keyframes flicker {
   0%, 18%, 22%, 25%, 53%, 57%, 100% {

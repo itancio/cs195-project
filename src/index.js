@@ -53,14 +53,14 @@ const onLoaded = () => {
 
 const renderLevel = (root, levelNumber) => {
   const gameHTML = `
-  <div id="complete-level-screen"></div>
+  <div id="overlay-screen"></div>
   <div id="game" class="hide">
     <div id="controls">
       <button title="Undo (z key)" id="undo"><span class="material-symbols-outlined">undo</span></button>
       <button title="Reset (r key)" id="reset"><span class="material-symbols-outlined">refresh</span></button>
       <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
       <button title="Settings" disabled><span class="material-symbols-outlined">settings</span></button>
-      <button title="Help" id="help" disabled><span class="material-symbols-outlined">help</span></button>
+      <button title="Help" id="help"><span class="material-symbols-outlined">help</span></button>
     </div>
     <div id="board"></div>
     <div id="status">
@@ -155,6 +155,27 @@ const renderLevel = (root, levelNumber) => {
     </tr>
   `;
 
+  renderHelp = () => {  
+    const helpHTML = `
+    <div id="modal">
+      <div class="modal-content">
+        <span class="close material-symbols-outlined">cancel</span>
+        <h1>How To Play</h1>
+        <p>Objective: Push the boxes to all of the goals to complete the level in the least amount of moves.</p>
+        <p>Use the mouse or keyboard to move around the board.</p>
+        <p>Keyboard Shortcuts:</br>
+          direction: arrow keys;  undo: z;  reset: r
+        </p>
+      </div>
+    </div>
+    `;
+    document.querySelector("#overlay-screen").innerHTML = helpHTML;
+
+    document.querySelector(".close").addEventListener("click", () => {
+      document.querySelector("#modal").style.display = "none";
+    });
+  };
+
   renderLevelComplete = () => {
     const completeHTML = `
     <div id="modal">
@@ -179,7 +200,7 @@ const renderLevel = (root, levelNumber) => {
         </div>
     </div>
     `;
-    document.querySelector("#complete-level-screen").innerHTML = completeHTML;
+    document.querySelector("#overlay-screen").innerHTML = completeHTML;
 
     /* Listens to home selector */
     document.querySelector("#change-level").addEventListener("click", () => {
@@ -279,6 +300,9 @@ const renderLevel = (root, levelNumber) => {
     } 
   });
 
+  helpEl.addEventListener("click", event => {
+    renderHelp();
+  });
 
   undoEl.addEventListener("click", event => {
     if (soko.undo()) {
