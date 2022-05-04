@@ -285,7 +285,12 @@ const renderLevel = (root, levelNumber) => {
         }
         renderLevelComplete();
       }
+
     }
+    const playerEl = document.querySelector(".player, .player-on-goal");
+    const direction = soko.sequence().charAt(soko.sequence().length - 1);
+    const key = Object.keys(moves).find(key => moves[key] === direction)
+    playerEl.style.transform = `rotate(${dirToDegree[key]}deg)`;
   });
 
 
@@ -341,6 +346,14 @@ const renderLevel = (root, levelNumber) => {
     ArrowRight: "R",
     ArrowDown: "D",
   };
+
+  const dirToDegree = {
+    ArrowLeft: 270,
+    ArrowUp: 0,
+    ArrowRight: 90,
+    ArrowDown: 180,
+  };
+
   document.onkeydown = event => {
     if (event.code in moves) {
       event.preventDefault();
@@ -362,7 +375,10 @@ const renderLevel = (root, levelNumber) => {
         }
       }
     }
-    else if (event.code === "KeyZ" && soko.undo()) {
+    const playerEl = document.querySelector(".player, .player-on-goal");
+    playerEl.style.transform = `rotate(${dirToDegree[event.code]}deg)`;
+    
+    if (event.code === "KeyZ" && soko.undo()) {
       renderBoard();
     }
   };
