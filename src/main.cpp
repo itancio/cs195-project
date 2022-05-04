@@ -22,31 +22,37 @@ static std::vector<std::vector<std::string>> levels;
 
 extern "C" {
 void sokoban_initialize() {
-    std::filesystem::path getLevelsDir = std::filesystem::directory_entry("src/assets/levels");
+    /* Read files from directory */
+    const std::string source_path = "src/assets/levels";
+    std::filesystem::path get_levels_dir = std::filesystem::directory_entry(source_path);
     std::vector<std::filesystem::path> get_map_path; // save path into vector element
 
-    for (const auto& entry : std::filesystem::directory_iterator(getLevelsDir)) {
+    for (const auto& entry : std::filesystem::directory_iterator(get_levels_dir)) {
         get_map_path.push_back(entry.path());
     }
 
-    std::cout << "LOOK HERE: " << get_map_path.size() << std::endl;
-
     // opening map files stored in vector directory
     for (unsigned int i = 0; i < get_map_path.size(); i++) {
-        std::ifstream openMapFile(get_map_path[i].c_str());
+        std::ifstream open_map_file(get_map_path[i].c_str());
         std::string store_line;
-        std::vector<std::string> storeMap;
+        std::vector<std::string> store_map;
 
-        if (!openMapFile) {
+        if (!open_map_file) {
             std::cerr << "Cannot open the File : " << get_map_path[i] << std::endl;
         }
 
-        while (std::getline(openMapFile, store_line)) {
-            if (std::regex_match(store_line, std::regex("[@$*.+]+[#]{2,}"))) {
-                storeMap.push_back(store_line);
+        std::regex valid_elems("[#@$*.+]+");
+        std::regex invalid_elems("[a-zA-z0-9]+");
+        while (std::getline(open_map_file, store_line)) {
+            if (std::regex_search(store_line, valid_elems)) {
+                store_map.push_back(store_line);
             }
+            if (std::regex_search(store_line, invalid_elems) and !store_map.empty()) {
+                break;
+            }
+
         }
-        levels.push_back(storeMap);
+        levels.push_back(store_map);
     };
 
     soko = { levels };
