@@ -59,7 +59,6 @@ const renderLevel = (root, levelNumber) => {
       <button title="Undo (z key)" id="undo"><span class="material-symbols-outlined">undo</span></button>
       <button title="Reset (r key)" id="reset"><span class="material-symbols-outlined">refresh</span></button>
       <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
-      <button title="Settings" id="settings"><span class="material-symbols-outlined">settings</span></button>
       <button title="Help" id="help"><span class="material-symbols-outlined">help</span></button>
     </div>
     <div id="board"></div>
@@ -127,7 +126,6 @@ const renderLevel = (root, levelNumber) => {
   const undoEl = document.getElementById("undo");
   const resetEl = document.getElementById("reset");
   const helpEl = document.getElementById("help");
-  const settingsEl = document.getElementById("settings");
 
   const collapseEl = document.getElementById("collapse");
   const statsEl = document.getElementById("stats");
@@ -176,29 +174,72 @@ const renderLevel = (root, levelNumber) => {
     const helpHTML = `
     <div id="modal">
       <div class="modal-content">
-        <span class="close material-symbols-outlined">cancel</span>
         <h1>How To Play</h1>
-        <p>Objective: Push the boxes to all of the goals to complete the level in the least amount of moves.</p>
+        <p>Objective: Push the boxes <img src="assets/box.png"> to all of the goals 
+          <img src="assets/goal.png"> to complete the level in the least amount of moves.</p>
         <p>Use the mouse or keyboard to move around the board.</p>
         <p>Keyboard Shortcuts:</br>
-          direction: arrow keys;  undo: z;  reset: r
-        </p>
+        <table id="shortcut">
+          <tr>
+            <td>Up</td>
+            <td>W
+            <td><span class="material-symbols-outlined">arrow_drop_up</span></td>
+            </td>
+          </tr>
+          <tr>
+            <td>Down</td>
+            <td>D
+            <td><span class="material-symbols-outlined">arrow_drop_down</span></td>
+            </td>
+          </tr>
+          <tr>
+            <td>Left</td>
+            <td>L 
+            <td><span class="material-symbols-outlined">arrow_left</span></td>
+            </td>
+          </tr>
+          </tr>
+            <td>Right</td>
+            <td>R
+            <td><span class="material-symbols-outlined">arrow_right</span></td>
+            </td>
+          </tr>
+          <tr>
+          </tr>
+          <tr>
+            <td>Undo</td>
+            <td>Z</td>
+          </tr>
+          <tr>
+            <td>Reset</td>
+            <td>R</td>
+          </tr>
+        </table>
       </div>
     </div>
     `;
     document.querySelector("#overlay-screen").innerHTML = helpHTML;
 
-    document.querySelector(".close").addEventListener("click", () => {
-      document.querySelector("#modal").style.display = "none";
+    // When the user clicks anywhere on the modal, close the window
+    window.addEventListener("click", event => {
+      if (event.target === modal) {
+        document.querySelector("#overlay-screen").innerHTML = "";
+      }
     });
+
+    // Press x to exit
+    document.onkeydown = event => {
+      if (event.code === "KeyX") {
+        document.querySelector("#overlay-screen").innerHTML = "";
+      }
+    }
   };
 
   renderLevelComplete = () => {
     const completeHTML = `
     <div id="modal">
       <div class="modal-content"> 
-        <h1 class="text-glow">Level ${soko.levelNumber()+1}</h>
-        <h1 class="text-glow">Complete!</h1>
+        <h1 class="text-glow">Level ${soko.levelNumber()+1} Complete!</h1>
         <table>
           <tr>
             <td>Current moves:</td>
@@ -213,7 +254,7 @@ const renderLevel = (root, levelNumber) => {
         <div id="controls">
           <button title="Random" id="random-level"><span class="material-symbols-outlined">shuffle</span></button>
           <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
-          <button title="Next" id="next"><span class="material-symbols-outlined">fast_forward</span></button>
+          <button title="Next" id="next"><span class="material-symbols-outlined">play_arrow</span></button>
         </div>
     </div>
     `;
@@ -305,8 +346,6 @@ const renderLevel = (root, levelNumber) => {
   };
 
   collapseEl.addEventListener("click", event => {
- 
-    
     statsEl.classList.toggle("active");
     if (statsEl.style.maxHeight) {
       statsEl.style.maxHeight = null;
@@ -320,10 +359,6 @@ const renderLevel = (root, levelNumber) => {
       <span class="material-symbols-outlined">keyboard_double_arrow_up</span>
       `;
     } 
-  });
-
-  settingsEl.addEventListener("click", event => {
-    renderSettings();
   });
 
   helpEl.addEventListener("click", event => {

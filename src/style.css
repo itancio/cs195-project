@@ -268,8 +268,6 @@ button[disabled] {
   margin-left: 5px;
 }
 
-
-
 /* The Modal (background) */
 #modal {
   position: fixed; /* Stay in place */
@@ -280,7 +278,9 @@ button[disabled] {
   height: 100%;
   overflow:disabled; /* Disable scroll */
   background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.65); /* Black w/ opacity */
+  background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+
+  animation: 250ms fadeIn ease-out 100ms both;
 }
 
 .text-glow {
@@ -293,20 +293,21 @@ button[disabled] {
 }
 
 .score {
-  padding-left:30px;
+  padding-left: 30px;
 }
 
 /* Modal Content Box */
 .modal-content {
   background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+  background-color: rgba(0,0,0,0.65); /* Black w/ opacity */
   margin: 50px auto; 
   padding: 24px 12px;
   border: 1px solid #f0f;
   border-radius:10px 50px;
   width: 320px;
-  height: 285px;
+  min-height: 150px;
   text-align: center;
+  font-size: 13px;
 
   /* Border Glow */
   box-shadow: 
@@ -316,13 +317,14 @@ button[disabled] {
       0 0 1px #f0f,
       0 0 3px #f0f;
 
-  animation: fadeIn ease 350ms both;
+  animation: 200ms fadeIn ease-out 200ms both;
 }
 
 .modal-content h1 {
   cursor: default;
+  margin: 28px;
   border-radius:10px 50px;
-  font-size: 32px;
+  font-size: 20px;
   font-weight: 100;
   letter-spacing: .03em;
   text-shadow:
@@ -336,8 +338,7 @@ button[disabled] {
 }
 
 .modal-content table {
-  margin: 20px auto;
-  padding: 10px 10px 0px 10px;;
+  margin: 12px auto;
 }
 
 .modal-content td {
@@ -345,8 +346,30 @@ button[disabled] {
 }
 
 .modal-content p {
-  margin: 20px 10px;
-  font-size:13px;
+  margin: 14px;
+  text-align: left;
+}
+
+.modal-content li {
+  line-height: 10px;
+}
+
+.modal-content ul {
+  margin: 12x;
+}
+
+.modal-content img {
+  height: 16px;
+  padding: 0px 5px;
+}
+
+#shortcut {
+  margin: 0px;
+}
+
+#shortcut td{
+  padding: 0px 0px 0px 40px;
+  text-align: left;
 }
 
 /* The Close Button */
