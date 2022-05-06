@@ -8,48 +8,12 @@
 
 #include "sokoban.hpp"
 
-static Sokoban soko({
-    // TODO: Delete after testing
-    {
-        // greg messing around
-        "   ####",
-        "####. ##",
-        "#.##$ .##",
-        "# ##    #",
-        "#    $  #",
-        "# #### ##",
-        "#@ $   #",
-        "#####  #",
-        "    ####",
-    },
-    {
-        // Modified GRIGoRusha: Shito-Krito #86
-        "  #########",
-        "  #   #  @#",
-        " ##    .# #",
-        " #  ##  $ #",
-        "##  .$ # ##",
-        "#  #$#   # ",
-        "#   .# ###",
-        "####    #  ",
-        "   ######  ",
-    },
-    {
-        "######",
-        "#@ $.#",
-        "######",
-    },
-    {
-        "######",
-        "#@ $.#",
-        "######",
-    },
-    {
-        "######",
-        "#@ $.#",
-        "######",
-    }
-});
+static Sokoban soko({{
+    "#######",
+    "#  $ .#",
+    "#@  ###",
+    "#####",
+}});
 static std::string joined_board;
 static std::string sequence_str;
 static std::vector<std::vector<std::string>> levels;
@@ -102,7 +66,7 @@ extern "C" {
 
 void sokoban_initialize() {
     read_levels();
-   // soko = {levels}; // TODO: uncomment after testing
+    soko = {levels};
 }
 
 const char *sokoban_board_to_string() {

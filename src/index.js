@@ -167,22 +167,6 @@ const renderLevel = (root, levelNumber) => {
     </tr>
   `;
 
-  renderSettings = () => {  
-    const settingsHTML = `
-    <div id="modal">
-      <div class="modal-content">
-        <span class="close material-symbols-outlined">cancel</span>
-        <h1>Setting</h1>
-      </div>
-    </div>
-    `;
-    document.querySelector("#overlay-screen").innerHTML = settingsHTML;
-
-    document.querySelector(".close").addEventListener("click", () => {
-      document.querySelector("#modal").style.display = "none";
-    });
-  };
-
   renderHelp = () => {  
     const helpHTML = `
     <div id="modal">
@@ -354,7 +338,7 @@ const renderLevel = (root, levelNumber) => {
     document.getElementById("level-label").innerHTML = `${soko.levelNumber() + 1}`;
     document.getElementById("current").innerHTML = `${soko.movesCount()}`;
     document.getElementById("best")
-      .innerHTML = `${(localStorage.getItem(soko.levelNumber() + 1) == null)  ? 
+      .innerHTML = `${(localStorage.getItem(soko.levelNumber() + 1) === null)  ? 
       "&infin;" : (localStorage.getItem(soko.levelNumber() + 1))}`;
     document.getElementById("sequence").innerHTML = `${soko.sequence()}`;
   };
