@@ -222,26 +222,6 @@ const renderLevel = (root, levelNumber) => {
     </div>
     `;
     document.querySelector("#overlay-screen").innerHTML = helpHTML;
-
-    // TODO: Improve this functionality later using vanilla-js-modal
-    // When the user click the x, to exit
-    document.querySelector(".close").addEventListener("click", () => {
-      document.querySelector("#modal").style.display = "none";
-    });
-
-    // When the user clicks anywhere on the modal, close the window
-    window.addEventListener("click", event => {
-      if (event.target === modal) {
-        document.querySelector("#overlay-screen").innerHTML = "";
-      }
-    });
-
-    // Press x to exit
-    document.onkeydown = event => {
-      if (event.code === "KeyX") {
-        document.querySelector("#overlay-screen").innerHTML = "";
-      }
-    }
   };
 
   renderLevelComplete = () => {
