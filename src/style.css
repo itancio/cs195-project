@@ -167,18 +167,6 @@ button[disabled] {
   padding: 0.6em;
 }
 
-/* #controls button:hover {
-  text-shadow:
-    /* inner glow 
-    0 0 7px #fff,
-    0 0 17px #fff,
-    /* outer glow 
-    0 0 32px #f0f,
-    0 0 42px #f0f,
-    0 0 82px #f0f,
-    0 0 182px #f0f;
-} */
-
 #controls button[disabled]:hover {
   text-shadow: 0 0 0 #000;
 }
@@ -303,7 +291,7 @@ button[disabled] {
   margin: 50px auto; 
   padding: 24px 12px;
   border: 1px solid #f0f;
-  border-radius:10px 50px;
+  border-radius: 10px 50px;
   width: 320px;
   text-align: center;
   font-size: 13px;
@@ -316,13 +304,13 @@ button[disabled] {
       0 0 1px #f0f,
       0 0 3px #f0f;
 
-  animation: 200ms fadeIn ease-out 200ms both;
+  animation: 300ms fadeIn ease-out 300ms both;
 }
 
 .modal-content h1 {
   cursor: default;
   margin: 0px 0px 28px 0px;
-  border-radius:10px 50px;
+  border-radius: 10px 50px;
   font-size: 20px;
   font-weight: 100;
   letter-spacing: .03em;
@@ -341,7 +329,7 @@ button[disabled] {
 }
 
 .modal-content td {
-  text-align:right;
+  text-align: right;
 }
 
 .modal-content p {
@@ -377,7 +365,7 @@ button[disabled] {
   float: right;
   font-size: 28px;
   font-weight: bold;
-  border-radius:10px;
+  border-radius: 10px;
 }
 
 .close:hover,

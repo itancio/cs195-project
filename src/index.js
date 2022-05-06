@@ -85,7 +85,7 @@ const renderLevel = (root, levelNumber) => {
   const soko = {
     levelNumber: Module.cwrap("sokoban_level"),
     levelsSize: Module.cwrap("sokoban_levels_size"),
-    movesSize: Module.cwrap("sokoban_moves_size"),
+    movesCount: Module.cwrap("sokoban_moves_count"),
     move: Module.cwrap(
       "sokoban_move", // name of C function
       "bool",         // return type
@@ -209,10 +209,12 @@ const renderLevel = (root, levelNumber) => {
           <tr>
             <td>Undo</td>
             <td>Z</td>
+            <td><span class="material-symbols-outlined"></span></td>
           </tr>
           <tr>
             <td>Reset</td>
             <td>R</td>
+            <td><span class="material-symbols-outlined"></span></td>
           </tr>
         </table>
       </div>
@@ -239,15 +241,15 @@ const renderLevel = (root, levelNumber) => {
     const completeHTML = `
     <div id="modal">
       <div class="modal-content"> 
-        <h1 class="text-glow">Level ${soko.levelNumber()+1} Complete!</h1>
+        <h1 class="text-glow">Level ${soko.levelNumber() + 1} Complete!</h1>
         <table>
           <tr>
             <td>Current moves:</td>
-            <td id="current-move" class="score">${soko.movesSize()}</td>
+            <td id="current-move" class="score">${soko.movesCount()}</td>
           </tr>
           <tr>
             <td>Best moves:</td>
-            <td id="best-move" class="score">${localStorage.getItem(soko.levelNumber()+1)}
+            <td id="best-move" class="score">${localStorage.getItem(soko.levelNumber() + 1)}
             </td>
           </tr>
         </table>
@@ -280,11 +282,7 @@ const renderLevel = (root, levelNumber) => {
     document.querySelector("#random-level").addEventListener("click", () => {
       const activeLevels = Object.keys(localStorage);
       const randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
-      // TODO: Needs work
-      // while (activeLevels.includes(randomLevelNumber+1)) {
-      //   randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
-      // }
-      location.hash = (randomLevelNumber+1).toString();
+      location.hash = (randomLevelNumber + 1).toString();
       renderLevel(root, randomLevelNumber);
     })
     ;
@@ -315,14 +313,14 @@ const renderLevel = (root, levelNumber) => {
       renderBoard();
 
       if (soko.solved()) {
-        const score = localStorage.getItem(levelNumber+1);
+        const score = localStorage.getItem(levelNumber + 1);
         if (score) {
-          if (score > soko.movesSize()){
-            updateBestScore(levelNumber+1, soko.movesSize());
+          if (score > soko.movesCount()){
+            updateBestScore(levelNumber + 1, soko.movesCount());
           }
         } 
         else if (!score) {
-          updateBestScore(levelNumber+1, soko.movesSize());
+          updateBestScore(levelNumber + 1, soko.movesCount());
         }
         renderLevelComplete();
       }
@@ -337,12 +335,12 @@ const renderLevel = (root, levelNumber) => {
 
 
  updateStatus = () => {
-    document.getElementById("level-label").innerHTML = `${soko.levelNumber()+1}`;
-    document.getElementById("current").innerHTML = `${soko.movesSize()}`;
-    document.getElementById("best").innerHTML = `${(localStorage.getItem(soko.levelNumber()+1) == null)  ? 
-      "&infin;" : (localStorage.getItem(soko.levelNumber()+1))}`;
+    document.getElementById("level-label").innerHTML = `${soko.levelNumber() + 1}`;
+    document.getElementById("current").innerHTML = `${soko.movesCount()}`;
+    document.getElementById("best")
+      .innerHTML = `${(localStorage.getItem(soko.levelNumber() + 1) == null)  ? 
+      "&infin;" : (localStorage.getItem(soko.levelNumber() + 1))}`;
     document.getElementById("sequence").innerHTML = `${soko.sequence()}`;
-    console.log(soko.sequence);
   };
 
   collapseEl.addEventListener("click", event => {
@@ -397,14 +395,14 @@ const renderLevel = (root, levelNumber) => {
         renderBoard();
 
         if (soko.solved()) {
-          const score = localStorage.getItem(levelNumber+1);
+          const score = localStorage.getItem(levelNumber + 1);
           if (score) {
-            if (score > soko.movesSize()){
-              updateBestScore(levelNumber+1, soko.movesSize());
+            if (score > soko.movesCount()){
+              updateBestScore(levelNumber + 1, soko.movesCount());
             }
           } 
           else if (!score) {
-            updateBestScore(levelNumber+1, soko.movesSize());
+            updateBestScore(levelNumber + 1, soko.movesCount());
           }
           renderLevelComplete();
         }
