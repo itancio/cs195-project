@@ -288,7 +288,6 @@ const renderLevel = (root, levelNumber) => {
 
     /* Listens to random level selector */
     document.querySelector("#random-level").addEventListener("click", () => {
-      const activeLevels = Object.keys(localStorage);
       const randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
       location.hash = (randomLevelNumber + 1).toString();
       renderLevel(root, randomLevelNumber);
