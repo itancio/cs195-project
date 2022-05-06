@@ -258,11 +258,16 @@ const renderLevel = (root, levelNumber) => {
         <div id="controls">
           <button title="Random" id="random-level"><span class="material-symbols-outlined">shuffle</span></button>
           <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
-          <button title="Next" id="next"><span class="material-symbols-outlined">play_arrow</span></button>
+          <button title="Next" id="next" Disabled><span class="material-symbols-outlined">play_arrow</span></button>
         </div>
     </div>
     `;
     document.querySelector("#overlay-screen").innerHTML = completeHTML;
+
+    // Enable the next button when the level completed is not the last level
+    if (levelNumber < (soko.levelsSize() - 1)) {
+      document.querySelector("#next").disabled = true;
+    }
 
     /* Listens to home selector */
     document.querySelector("#change-level").addEventListener("click", () => {
