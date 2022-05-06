@@ -24,13 +24,13 @@ body::after {
   overflow: hidden; 
   z-index: -1; 
   content: 
-    url("assets/floor.png")
-    url("assets/wall.png")
-    url("assets/goal.png")
-    url("assets/box.png")
-    url("assets/box_on_goal.png")
-    url("assets/player.png")
-    url("assets/player_on_goal.png");
+    url("assets/images/floor.png")
+    url("assets/images/wall.png")
+    url("assets/images/goal.png")
+    url("assets/images/box.png")
+    url("assets/images/box_on_goal.png")
+    url("assets/images/player.png")
+    url("assets/images/player_on_goal.png");
 }
 
 img {
@@ -167,18 +167,6 @@ button[disabled] {
   padding: 0.6em;
 }
 
-/* #controls button:hover {
-  text-shadow:
-    /* inner glow 
-    0 0 7px #fff,
-    0 0 17px #fff,
-    /* outer glow 
-    0 0 32px #f0f,
-    0 0 42px #f0f,
-    0 0 82px #f0f,
-    0 0 182px #f0f;
-} */
-
 #controls button[disabled]:hover {
   text-shadow: 0 0 0 #000;
 }
@@ -202,30 +190,30 @@ button[disabled] {
   
 }
 #board .floor {
-  background: url("assets/floor.png") ;
+  background: url("assets/images/floor.png") ;
 }
 #board .floor-outside {
   background: transparent;
   cursor: default;
 }
 #board .wall {
-  background: url("assets/wall.png");
+  background: url("assets/images/wall.png");
   cursor: default;
 }
 #board .goal {
-  background: url("assets/goal.png");
+  background: url("assets/images/goal.png");
 }
 #board .box {
-  background: url("assets/box.png");
+  background: url("assets/images/box.png");
 }
 #board .box-on-goal {
-  background: url("assets/box_on_goal.png");
+  background: url("assets/images/box_on_goal.png");
 }
 #board .player {
-  background: url("assets/player.png");
+  background: url("assets/images/player.png");
 }
 #board .player-on-goal {
-  background: url("assets/player_on_goal.png");
+  background: url("assets/images/player_on_goal.png");
 }
 
 #status {
@@ -268,8 +256,6 @@ button[disabled] {
   margin-left: 5px;
 }
 
-
-
 /* The Modal (background) */
 #modal {
   position: fixed; /* Stay in place */
@@ -280,7 +266,9 @@ button[disabled] {
   height: 100%;
   overflow:disabled; /* Disable scroll */
   background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.65); /* Black w/ opacity */
+  background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+
+  animation: 250ms fadeIn ease-out 100ms both;
 }
 
 .text-glow {
@@ -293,20 +281,20 @@ button[disabled] {
 }
 
 .score {
-  padding-left:30px;
+  padding-left: 30px;
 }
 
 /* Modal Content Box */
 .modal-content {
   background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+  background-color: rgba(0,0,0,0.65); /* Black w/ opacity */
   margin: 50px auto; 
   padding: 24px 12px;
   border: 1px solid #f0f;
-  border-radius:10px 50px;
+  border-radius: 10px 50px;
   width: 320px;
-  height: 285px;
   text-align: center;
+  font-size: 13px;
 
   /* Border Glow */
   box-shadow: 
@@ -316,13 +304,14 @@ button[disabled] {
       0 0 1px #f0f,
       0 0 3px #f0f;
 
-  animation: fadeIn ease 350ms both;
+  animation: 300ms fadeIn ease-out 300ms both;
 }
 
 .modal-content h1 {
   cursor: default;
-  border-radius:10px 50px;
-  font-size: 32px;
+  margin: 0px 0px 28px 0px;
+  border-radius: 10px 50px;
+  font-size: 20px;
   font-weight: 100;
   letter-spacing: .03em;
   text-shadow:
@@ -336,17 +325,38 @@ button[disabled] {
 }
 
 .modal-content table {
-  margin: 20px auto;
-  padding: 10px 10px 0px 10px;;
+  margin: 12px auto;
 }
 
 .modal-content td {
-  text-align:right;
+  text-align: right;
 }
 
 .modal-content p {
-  margin: 20px 10px;
-  font-size:13px;
+  margin: 14px;
+  text-align: left;
+}
+
+.modal-content li {
+  line-height: 10px;
+}
+
+.modal-content ul {
+  margin: 12x;
+}
+
+.modal-content img {
+  height: 16px;
+  padding: 0px 5px;
+}
+
+#shortcut {
+  margin: 0px;
+}
+
+#shortcut td{
+  padding: 0px 0px 0px 40px;
+  text-align: left;
 }
 
 /* The Close Button */
@@ -355,7 +365,7 @@ button[disabled] {
   float: right;
   font-size: 28px;
   font-weight: bold;
-  border-radius:10px;
+  border-radius: 10px;
 }
 
 .close:hover,

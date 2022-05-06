@@ -15,7 +15,7 @@ const renderMenu = root => {
       <em>by Irvin, Juan, Severin & Greg</em>
     </div>
     <ul>
-      ${[...Array(5/* TODO get levels from soko */)].map((_, i) => `
+      ${[...Array(20/* TODO get levels from soko */)].map((_, i) => `
         <li>
           <a href="#${i + 1}">
             <span class="material-symbols-outlined">
@@ -59,7 +59,6 @@ const renderLevel = (root, levelNumber) => {
       <button title="Undo (z key)" id="undo"><span class="material-symbols-outlined">undo</span></button>
       <button title="Reset (r key)" id="reset"><span class="material-symbols-outlined">refresh</span></button>
       <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
-      <button title="Settings" id="settings"><span class="material-symbols-outlined">settings</span></button>
       <button title="Help" id="help"><span class="material-symbols-outlined">help</span></button>
     </div>
     <div id="board"></div>
@@ -86,7 +85,7 @@ const renderLevel = (root, levelNumber) => {
   const soko = {
     levelNumber: Module.cwrap("sokoban_level"),
     levelsSize: Module.cwrap("sokoban_levels_size"),
-    movesSize: Module.cwrap("sokoban_moves_size"),
+    movesCount: Module.cwrap("sokoban_moves_count"),
     move: Module.cwrap(
       "sokoban_move", // name of C function
       "bool",         // return type
@@ -127,7 +126,6 @@ const renderLevel = (root, levelNumber) => {
   const undoEl = document.getElementById("undo");
   const resetEl = document.getElementById("reset");
   const helpEl = document.getElementById("help");
-  const settingsEl = document.getElementById("settings");
 
   const collapseEl = document.getElementById("collapse");
   const statsEl = document.getElementById("stats");
@@ -178,42 +176,95 @@ const renderLevel = (root, levelNumber) => {
       <div class="modal-content">
         <span class="close material-symbols-outlined">cancel</span>
         <h1>How To Play</h1>
-        <p>Objective: Push the boxes to all of the goals to complete the level in the least amount of moves.</p>
+        <p>Objective: Push the boxes <img src="assets/box.png"> to all of the goals 
+          <img src="assets/goal.png"> to complete the level in the least amount of moves.</p>
         <p>Use the mouse or keyboard to move around the board.</p>
         <p>Keyboard Shortcuts:</br>
-          direction: arrow keys;  undo: z;  reset: r
-        </p>
+        <table id="shortcut">
+          <tr>
+            <td>Up</td>
+            <td>W
+            <td><span class="material-symbols-outlined">arrow_drop_up</span></td>
+            </td>
+          </tr>
+          <tr>
+            <td>Down</td>
+            <td>D
+            <td><span class="material-symbols-outlined">arrow_drop_down</span></td>
+            </td>
+          </tr>
+          <tr>
+            <td>Left</td>
+            <td>L 
+            <td><span class="material-symbols-outlined">arrow_left</span></td>
+            </td>
+          </tr>
+          </tr>
+            <td>Right</td>
+            <td>R
+            <td><span class="material-symbols-outlined">arrow_right</span></td>
+            </td>
+          </tr>
+          <tr>
+          </tr>
+          <tr>
+            <td>Undo</td>
+            <td>Z</td>
+            <td><span class="material-symbols-outlined"></span></td>
+          </tr>
+          <tr>
+            <td>Reset</td>
+            <td>R</td>
+            <td><span class="material-symbols-outlined"></span></td>
+          </tr>
+        </table>
       </div>
     </div>
     `;
     document.querySelector("#overlay-screen").innerHTML = helpHTML;
 
+
+    // TODO: Improve this functionality later using vanilla-js-modal
+    // When the user click the x, to exit
     document.querySelector(".close").addEventListener("click", () => {
       document.querySelector("#modal").style.display = "none";
     });
+
+    // When the user clicks anywhere on the modal, close the window
+    window.addEventListener("click", event => {
+      if (event.target === modal) {
+        document.querySelector("#overlay-screen").innerHTML = "";
+      }
+    });
+
+    // Press x to exit
+    document.onkeydown = event => {
+      if (event.code === "KeyX") {
+        document.querySelector("#overlay-screen").innerHTML = "";
+      }
+    }
   };
 
   renderLevelComplete = () => {
     const completeHTML = `
     <div id="modal">
       <div class="modal-content"> 
-        <h1 class="text-glow">Level ${soko.levelNumber()+1}</h>
-        <h1 class="text-glow">Complete!</h1>
+        <h1 class="text-glow">Level ${soko.levelNumber() + 1} Complete!</h1>
         <table>
           <tr>
             <td>Current moves:</td>
-            <td id="current-move" class="score">${soko.movesSize()}</td>
+            <td id="current-move" class="score">${soko.movesCount()}</td>
           </tr>
           <tr>
             <td>Best moves:</td>
-            <td id="best-move" class="score">${localStorage.getItem(soko.levelNumber()+1)}
+            <td id="best-move" class="score">${localStorage.getItem(soko.levelNumber() + 1)}
             </td>
           </tr>
         </table>
         <div id="controls">
           <button title="Random" id="random-level"><span class="material-symbols-outlined">shuffle</span></button>
           <button title="Home" id="change-level"><span class="material-symbols-outlined">home</span></button>
-          <button title="Next" id="next"><span class="material-symbols-outlined">fast_forward</span></button>
+          <button title="Next" id="next"><span class="material-symbols-outlined">play_arrow</span></button>
         </div>
     </div>
     `;
@@ -239,11 +290,7 @@ const renderLevel = (root, levelNumber) => {
     document.querySelector("#random-level").addEventListener("click", () => {
       const activeLevels = Object.keys(localStorage);
       const randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
-      // TODO: Needs work
-      // while (activeLevels.includes(randomLevelNumber+1)) {
-      //   randomLevelNumber = Math.floor(Math.random() * soko.levelsSize());
-      // }
-      location.hash = (randomLevelNumber+1).toString();
+      location.hash = (randomLevelNumber + 1).toString();
       renderLevel(root, randomLevelNumber);
     })
     ;
@@ -274,39 +321,37 @@ const renderLevel = (root, levelNumber) => {
       renderBoard();
 
       if (soko.solved()) {
-        const score = localStorage.getItem(levelNumber+1);
+        const score = localStorage.getItem(levelNumber + 1);
         if (score) {
-          if (score > soko.movesSize()){
-            updateBestScore(levelNumber+1, soko.movesSize());
+          if (score > soko.movesCount()){
+            updateBestScore(levelNumber + 1, soko.movesCount());
           }
         } 
         else if (!score) {
-          updateBestScore(levelNumber+1, soko.movesSize());
+          updateBestScore(levelNumber + 1, soko.movesCount());
         }
         renderLevelComplete();
       }
 
     }
     const playerEl = document.querySelector(".player, .player-on-goal");
-    const direction = soko.sequence().charAt(soko.sequence().length - 1);
-    const key = Object.keys(moves).find(key => moves[key] === direction)
+    const lastMove = soko.sequence().charAt(soko.sequence().length - 1);
+    const key = Object.keys(moves).find(key => moves[key] === lastMove)
     playerEl.style.transform = `rotate(${dirToDegree[key]}deg)`;
   });
 
 
 
  updateStatus = () => {
-    document.getElementById("level-label").innerHTML = `${soko.levelNumber()+1}`;
-    document.getElementById("current").innerHTML = `${soko.movesSize()}`;
-    document.getElementById("best").innerHTML = `${(localStorage.getItem(soko.levelNumber()+1) == null)  ? 
-      "&infin;" : (localStorage.getItem(soko.levelNumber()+1))}`;
+    document.getElementById("level-label").innerHTML = `${soko.levelNumber() + 1}`;
+    document.getElementById("current").innerHTML = `${soko.movesCount()}`;
+    document.getElementById("best")
+      .innerHTML = `${(localStorage.getItem(soko.levelNumber() + 1) == null)  ? 
+      "&infin;" : (localStorage.getItem(soko.levelNumber() + 1))}`;
     document.getElementById("sequence").innerHTML = `${soko.sequence()}`;
-    console.log(soko.sequence);
   };
 
   collapseEl.addEventListener("click", event => {
- 
-    
     statsEl.classList.toggle("active");
     if (statsEl.style.maxHeight) {
       statsEl.style.maxHeight = null;
@@ -320,10 +365,6 @@ const renderLevel = (root, levelNumber) => {
       <span class="material-symbols-outlined">keyboard_double_arrow_up</span>
       `;
     } 
-  });
-
-  settingsEl.addEventListener("click", event => {
-    renderSettings();
   });
 
   helpEl.addEventListener("click", event => {
@@ -362,14 +403,14 @@ const renderLevel = (root, levelNumber) => {
         renderBoard();
 
         if (soko.solved()) {
-          const score = localStorage.getItem(levelNumber+1);
+          const score = localStorage.getItem(levelNumber + 1);
           if (score) {
-            if (score > soko.movesSize()){
-              updateBestScore(levelNumber+1, soko.movesSize());
+            if (score > soko.movesCount()){
+              updateBestScore(levelNumber + 1, soko.movesCount());
             }
           } 
           else if (!score) {
-            updateBestScore(levelNumber+1, soko.movesSize());
+            updateBestScore(levelNumber + 1, soko.movesCount());
           }
           renderLevelComplete();
         }
