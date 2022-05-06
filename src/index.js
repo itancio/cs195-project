@@ -81,6 +81,7 @@ const renderLevel = (root, levelNumber) => {
       renderMenu(root);
     })
   ;
+  
   Module.ccall("sokoban_initialize");
   const soko = {
     levelNumber: Module.cwrap("sokoban_level"),
@@ -129,6 +130,18 @@ const renderLevel = (root, levelNumber) => {
 
   const collapseEl = document.getElementById("collapse");
   const statsEl = document.getElementById("stats");
+
+  const updateControlButtons = () => {
+    // Disable or Able buttons
+    if (soko.movesCount() > 0) {
+      undoEl.disabled = false;
+      resetEl.disabled = false;
+    }
+    else {
+      undoEl.disabled = true;
+      resetEl.disabled = true;
+    }
+  }
 
   const cellToClass = {
     "_": "floor-outside",
@@ -210,19 +223,16 @@ const renderLevel = (root, levelNumber) => {
           <tr>
             <td>Undo</td>
             <td>Z</td>
-            <td><span class="material-symbols-outlined"></span></td>
           </tr>
           <tr>
             <td>Reset</td>
             <td>R</td>
-            <td><span class="material-symbols-outlined"></span></td>
           </tr>
         </table>
       </div>
     </div>
     `;
     document.querySelector("#overlay-screen").innerHTML = helpHTML;
-
 
     // TODO: Improve this functionality later using vanilla-js-modal
     // When the user click the x, to exit
@@ -304,6 +314,7 @@ const renderLevel = (root, levelNumber) => {
           .join("") +
       "</tbody></table>"
     ;
+    updateControlButtons();
     updateStatus();
   };
   boardEl.addEventListener("click", event => {
@@ -338,8 +349,6 @@ const renderLevel = (root, levelNumber) => {
     const key = Object.keys(moves).find(key => moves[key] === lastMove)
     playerEl.style.transform = `rotate(${dirToDegree[key]}deg)`;
   });
-
-
 
  updateStatus = () => {
     document.getElementById("level-label").innerHTML = `${soko.levelNumber() + 1}`;
