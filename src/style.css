@@ -24,13 +24,13 @@ body::after {
   overflow: hidden; 
   z-index: -1; 
   content: 
-    url("assets/floor.png")
-    url("assets/wall.png")
-    url("assets/goal.png")
-    url("assets/box.png")
-    url("assets/box_on_goal.png")
-    url("assets/player.png")
-    url("assets/player_on_goal.png");
+    url("assets/images/floor.png")
+    url("assets/images/wall.png")
+    url("assets/images/goal.png")
+    url("assets/images/box.png")
+    url("assets/images/box_on_goal.png")
+    url("assets/images/player.png")
+    url("assets/images/player_on_goal.png");
 }
 
 img {
@@ -202,30 +202,30 @@ button[disabled] {
   
 }
 #board .floor {
-  background: url("assets/floor.png") ;
+  background: url("assets/images/floor.png") ;
 }
 #board .floor-outside {
   background: transparent;
   cursor: default;
 }
 #board .wall {
-  background: url("assets/wall.png");
+  background: url("assets/images/wall.png");
   cursor: default;
 }
 #board .goal {
-  background: url("assets/goal.png");
+  background: url("assets/images/goal.png");
 }
 #board .box {
-  background: url("assets/box.png");
+  background: url("assets/images/box.png");
 }
 #board .box-on-goal {
-  background: url("assets/box_on_goal.png");
+  background: url("assets/images/box_on_goal.png");
 }
 #board .player {
-  background: url("assets/player.png");
+  background: url("assets/images/player.png");
 }
 #board .player-on-goal {
-  background: url("assets/player_on_goal.png");
+  background: url("assets/images/player_on_goal.png");
 }
 
 #status {
@@ -305,7 +305,6 @@ button[disabled] {
   border: 1px solid #f0f;
   border-radius:10px 50px;
   width: 320px;
-  min-height: 150px;
   text-align: center;
   font-size: 13px;
 
@@ -322,7 +321,7 @@ button[disabled] {
 
 .modal-content h1 {
   cursor: default;
-  margin: 28px;
+  margin: 0px 0px 28px 0px;
   border-radius:10px 50px;
   font-size: 20px;
   font-weight: 100;
