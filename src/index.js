@@ -327,8 +327,8 @@ const renderLevel = (root, levelNumber) => {
 
     }
     const playerEl = document.querySelector(".player, .player-on-goal");
-    const direction = soko.sequence().charAt(soko.sequence().length - 1);
-    const key = Object.keys(moves).find(key => moves[key] === direction)
+    const lastMove = soko.sequence().charAt(soko.sequence().length - 1);
+    const key = Object.keys(moves).find(key => moves[key] === lastMove)
     playerEl.style.transform = `rotate(${dirToDegree[key]}deg)`;
   });
 
