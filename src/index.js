@@ -19,10 +19,10 @@ const renderMenu = root => {
         <li>
           <a href="#${i + 1}">
             <span class="material-symbols-outlined">
-              ${(localStorage.getItem(i + 1) == null) ? "check_box_outline_blank" : "check_box"}
+              ${(localStorage.getItem(i + 1) === null) ? "check_box_outline_blank" : "check_box"}
             </span>
             <span>level ${i + 1}</span>
-            <span>best: ${(localStorage.getItem(i + 1) == null)  ? "&infin;" : localStorage.getItem(i + 1)}</span>
+            <span>best: ${(localStorage.getItem(i + 1) === null)  ? "&infin;" : localStorage.getItem(i + 1)}</span>
           </a>
         </li>
       `).join("")}
@@ -123,6 +123,11 @@ const renderLevel = (root, levelNumber) => {
 
   soko.changeLevel(levelNumber);
 
+  function rotatePlayer(key) {
+    const playerEl = document.querySelector(".player, .player-on-goal");
+    playerEl.style.transform = `rotate(${dirToDegree[key]}deg)`;
+  }
+
   const boardEl = document.getElementById("board");
   const undoEl = document.getElementById("undo");
   const resetEl = document.getElementById("reset");
@@ -132,7 +137,7 @@ const renderLevel = (root, levelNumber) => {
   const statsEl = document.getElementById("stats");
 
   const updateControlButtons = () => {
-    // Disable or Able buttons
+    // Disable or Enable undo and reset buttons
     if (soko.movesCount() > 0) {
       undoEl.disabled = false;
       resetEl.disabled = false;
@@ -173,8 +178,8 @@ const renderLevel = (root, levelNumber) => {
       <div class="modal-content">
         <span class="close material-symbols-outlined">cancel</span>
         <h1>How To Play</h1>
-        <p>Objective: Push the boxes <img src="assets/box.png"> to all of the goals 
-          <img src="assets/goal.png"> to complete the level in the least amount of moves.</p>
+        <p>Objective: Push the boxes <img src="assets/images/box.png"> to all of the goals 
+          <img src="assets/images/goal.png"> to complete the level in the least amount of moves.</p>
         <p>Use the mouse or keyboard to move around the board.</p>
         <p>Keyboard Shortcuts:</br>
         <table id="shortcut">
@@ -319,6 +324,10 @@ const renderLevel = (root, levelNumber) => {
     if (soko.goto(row, col)) {
       renderBoard();
 
+      const lastMove = soko.sequence().charAt(soko.sequence().length - 1);
+      const key = Object.keys(moves).find(key => moves[key] === lastMove);
+      rotatePlayer(key);
+
       if (soko.solved()) {
         const score = localStorage.getItem(levelNumber + 1);
         if (score) {
@@ -331,12 +340,7 @@ const renderLevel = (root, levelNumber) => {
         }
         renderLevelComplete();
       }
-
     }
-    const playerEl = document.querySelector(".player, .player-on-goal");
-    const lastMove = soko.sequence().charAt(soko.sequence().length - 1);
-    const key = Object.keys(moves).find(key => moves[key] === lastMove)
-    playerEl.style.transform = `rotate(${dirToDegree[key]}deg)`;
   });
 
  updateStatus = () => {
@@ -412,6 +416,7 @@ const renderLevel = (root, levelNumber) => {
           renderLevelComplete();
         }
       }
+      rotatePlayer(event.code);
     }
     const playerEl = document.querySelector(".player, .player-on-goal");
     playerEl.style.transform = `rotate(${dirToDegree[event.code]}deg)`;
