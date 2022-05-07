@@ -222,6 +222,11 @@ const renderLevel = (root, levelNumber) => {
     </div>
     `;
     document.querySelector("#overlay-screen").innerHTML = helpHTML;
+
+    document.querySelector(".close").addEventListener("click", () => {
+      document.querySelector("#modal").style.display = "none";
+    });
+
   };
 
   renderLevelComplete = () => {
